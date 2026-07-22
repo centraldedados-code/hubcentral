@@ -3,492 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portas Abertas | Instituto BR Arte — Monitoramento</title>
+<title>Central de Dados | Instituto BR Arte</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap');
+/*
+  Identidade INSTITUCIONAL da Central — proposta como padrão provisório
+  porque a Central lista projetos de vários financiadores e paletas
+  diferentes (Portas Abertas/Prospera Rio, Prospera Turismo, CRIA HUB
+  etc.), então deliberadamente não usa a paleta de nenhum projeto
+  específico. Inspirada nas cores do logotipo "Instituto BR" (azul
+  petróleo + tons quentes). Troque as 3 variáveis abaixo a qualquer
+  momento se o Instituto BR Arte definir uma identidade visual própria
+  para este painel — nenhum outro trecho do arquivo precisa mudar.
+*/
 :root{
-  --az:#092040;--azs:#00B7D7;--am:#ECC203;
-  --cz:#EFF1F3;--es:#021738;--br:#FFFFFF;
-  --gv:#1A6B3C;--gvb:#ebf7eb;
-  --aw:#7A4F00;--awb:#fff8e0;
-  --rd:#8B1A1A;--rdb:#fce8e8;
+  --pri:#14213D;--sec:#2A9D8F;--acc:#E9724C;
+  --cz:#F5F5F7;--br:#FFFFFF;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Open Sans',Arial,sans-serif;background:var(--cz);color:var(--es);min-height:100vh}
-h1,h2,h3,h4{font-family:'Montserrat',Arial,sans-serif}
+body{font-family:'Open Sans',Arial,sans-serif;background:var(--cz);color:var(--pri);min-height:100vh}
+h1,h2,h3{font-family:'Montserrat',Arial,sans-serif}
 
-#pwd{position:fixed;inset:0;z-index:9999;background:var(--az);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-#pwd.off{display:none}
-.pbox{background:var(--br);border-radius:16px;padding:36px 40px;max-width:420px;width:100%;text-align:center}
-.psub{color:var(--am);font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;font-family:'Montserrat',sans-serif}
-.ptit{font-size:17px;font-weight:700;color:var(--az);margin-bottom:4px;font-family:'Montserrat',sans-serif}
-.phint{font-size:12px;color:#999;margin-bottom:20px}
-.pin{width:100%;padding:12px 16px;border:2px solid #dde4ee;border-radius:10px;font-size:15px;letter-spacing:2px;color:var(--az);outline:none;margin-bottom:12px}
-.pin:focus{border-color:var(--azs)}
-.pbtn{width:100%;padding:13px;background:var(--az);color:var(--am);border:none;border-radius:10px;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Montserrat',sans-serif}
-.pbtn:hover{background:var(--azs);color:var(--br)}
-.perr{color:#cc0000;font-size:12px;margin-top:8px;min-height:18px}
-.plogo-img{height:70px;object-fit:contain;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto}
+.hdr{background:var(--pri);padding:28px 24px}
+.hdri{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.hlogo{height:44px;object-fit:contain;filter:brightness(0) invert(1)}
+.htit{color:#fff;font-size:20px;font-weight:700}
+.hsub{color:rgba(255,255,255,.6);font-size:12px;margin-top:2px}
 
-#ld{display:none;position:fixed;inset:0;z-index:500;background:var(--cz);align-items:center;justify-content:center;flex-direction:column;gap:16px}
-#ld.on{display:flex}
-.spin{width:48px;height:48px;border:4px solid var(--azs);border-top-color:var(--am);border-radius:50%;animation:giro .8s linear infinite}
-@keyframes giro{to{transform:rotate(360deg)}}
-.ltxt{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--az);font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 16px}
 
-#app{display:none}
-#app.on{display:block}
+.st{font-size:11px;font-weight:700;color:var(--pri);text-transform:uppercase;letter-spacing:1.5px;margin:22px 0 14px;padding-left:10px;border-left:4px solid var(--sec)}
 
-.hdr{background:var(--az);position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-.hdri{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 24px;gap:16px;flex-wrap:wrap}
-.hlogo{height:36px;object-fit:contain}
-.htit{color:var(--am);font-size:15px;font-weight:700;letter-spacing:.5px;font-family:'Montserrat',sans-serif}
-.hsub{color:rgba(255,255,255,.55);font-size:11px;margin-top:2px}
-.breadcrumb{color:rgba(255,255,255,.7);font-size:11px;padding:6px 24px;background:rgba(0,0,0,.15);max-width:1200px;margin:0 auto}
-.breadcrumb b{color:var(--am);cursor:pointer}
-.breadcrumb span.sep{margin:0 6px;color:rgba(255,255,255,.35)}
+.gproj{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:800px){.gproj{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.gproj{grid-template-columns:1fr}}
+.pcard{background:var(--br);border-radius:14px;padding:22px;cursor:pointer;transition:.18s;border:1.5px solid #e3e3ec;display:flex;flex-direction:column;gap:6px}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.08);border-color:var(--sec)}
+.pnome{font-size:16px;font-weight:700;color:var(--pri)}
+.psub2{font-size:12px;color:#888}
+.pseta{margin-top:14px;font-size:11px;font-weight:700;color:var(--sec);text-transform:uppercase;letter-spacing:.5px}
 
-.wrap{max-width:1200px;margin:0 auto;padding:24px 16px}
-.vw{display:none}
-.vw.on{display:block}
-
-.intro{background:var(--br);border:1.5px solid #dde4ee;border-left:6px solid var(--azs);border-radius:12px;padding:22px 26px;margin-bottom:22px}
-.intro h2{color:var(--az);font-size:17px;margin-bottom:8px}
-.intro p{font-size:13px;color:#444;line-height:1.6;margin-bottom:4px}
-.intro-score{display:flex;align-items:center;gap:16px;margin-top:14px}
-.iscore-num{font-size:40px;font-weight:700;font-family:'Montserrat',sans-serif}
-.iscore-lab{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:.5px}
-
-.tip{position:relative;border-bottom:1px dotted var(--azs);cursor:help;color:var(--azs);font-weight:600}
-.tip:hover .tiptxt{display:block}
-.tiptxt{display:none;position:absolute;bottom:130%;left:0;background:var(--az);color:#fff;font-size:11px;font-weight:400;padding:8px 12px;border-radius:8px;width:240px;z-index:50;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.25)}
-
-.abox{background:var(--rdb);border:1px solid #f5b5b5;border-radius:10px;padding:14px 18px;margin-bottom:10px}
-.atit{font-weight:700;color:var(--rd);font-size:13px;margin-bottom:4px;font-family:'Montserrat',sans-serif}
-.aitem{font-size:12px;color:#5a1414;margin:2px 0}
-.alertwrap{margin-bottom:20px}
-
-.st{font-size:11px;font-weight:700;color:var(--az);text-transform:uppercase;letter-spacing:1.5px;margin:22px 0 12px;padding-left:10px;border-left:4px solid var(--azs)}
-
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.g4{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
-.qcard{background:var(--az);border-radius:12px;padding:18px;text-align:left}
-.qicon{font-size:22px;margin-bottom:6px}
-.qnum{color:var(--am);font-size:22px;font-weight:700;font-family:'Montserrat',sans-serif}
-.qlab{color:rgba(255,255,255,.75);font-size:11.5px;margin-top:4px;font-weight:600}
-.qobs{color:rgba(255,255,255,.5);font-size:10px;margin-top:6px;line-height:1.4}
-.qbadge{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;margin-top:8px}
-.qConfirmado{background:rgba(26,107,60,.25);color:#8be3ab}
-.qEstimado{background:rgba(0,183,215,.25);color:#8be6f5}
-.qAconfirmar{background:rgba(236,194,3,.25);color:var(--am)}
-
-.metacard{background:var(--br);border:1.5px solid #dde4ee;border-radius:12px;padding:18px}
-.metatit{font-size:13px;font-weight:700;color:var(--az);margin-bottom:6px}
-.metadesc{font-size:12px;color:#777;margin-bottom:10px}
-.metanum{font-size:26px;font-weight:700;color:var(--azs);font-family:'Montserrat',sans-serif}
-
-.sbw{background:#dde4ee;border-radius:999px;overflow:hidden;height:10px}
-.sb{border-radius:999px;height:100%;transition:width .8s ease}
-.shi{background:var(--gv)}.smid{background:var(--azs)}.slow{background:#c9940a}.scrit{background:#cc2222}
-
-.badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
-.bR{background:var(--gvb);color:var(--gv)}
-.bP{background:var(--awb);color:var(--aw)}
-.bC{background:var(--rdb);color:var(--rd)}
-.bA{background:#e8f0f8;color:var(--az)}
-
-.tcard{background:var(--br);border:1.5px solid #dde4ee;border-radius:14px;padding:20px;cursor:pointer;transition:.18s}
-.tcard:hover{border-color:var(--azs);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,183,215,.15)}
-.tnome{font-size:14px;font-weight:700;color:var(--az);margin-bottom:10px}
-.tsc{font-size:30px;font-weight:700;color:var(--azs);font-family:'Montserrat',sans-serif}
-.tmeta{font-size:11px;color:#666;margin-top:2px}
-.gpolos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:800px){.gpolos{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.gpolos{grid-template-columns:1fr}}
-
-.tbl{width:100%;border-collapse:collapse;font-size:12px;background:var(--br);border-radius:8px;overflow:hidden}
-.tbl th{background:var(--az);color:var(--br);padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
-.tbl td{padding:10px 12px;border-bottom:1px solid #eee;vertical-align:middle}
-.tbl tr:hover td{background:#f8fafc}
-.tbl a{color:var(--azs);text-decoration:none;font-weight:700}
-
-.back{background:none;border:2px solid var(--az);color:var(--az);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 16px;border-radius:8px;cursor:pointer;text-transform:uppercase;margin-bottom:20px}
-.back:hover{background:var(--az);color:var(--br)}
-.hnav{display:flex;gap:4px;flex-wrap:wrap}
-.nbtn{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.6);font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:8px 10px;border-radius:8px;text-transform:uppercase;font-family:'Montserrat',sans-serif}
-.nbtn:hover{color:var(--br);background:rgba(255,255,255,.1)}
-.nbtn.on{color:var(--am);background:rgba(236,194,3,.15)}
-
-.fbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.fbtn{background:var(--br);border:1.5px solid #dde4ee;color:var(--az);font-size:10px;font-weight:700;padding:6px 14px;border-radius:20px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
-.fbtn.on,.fbtn:hover{background:var(--az);color:var(--am);border-color:var(--az)}
-
-.foot{margin-top:40px;padding:18px 0;border-top:1px solid #dde4ee;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#888;flex-wrap:wrap;gap:8px}
+.foot{margin-top:36px;padding:18px 0;border-top:1px solid #e3e3ec;font-size:11px;color:#999;text-align:center}
 </style>
 </head>
 <body>
 
-<div id="pwd">
-  <div class="pbox">
-    <img class="plogo-img" id="logoPwd" src="" alt="" onerror="this.style.display='none'">
-    <div class="psub">Instituto BR Arte</div>
-    <div class="ptit">Portas Abertas — Monitoramento</div>
-    <div class="phint">Digite a senha de acesso ao painel</div>
-    <input type="password" class="pin" id="pf" placeholder="Senha" onkeydown="if(event.key==='Enter')chkPwd()">
-    <button class="pbtn" onclick="chkPwd()">Entrar</button>
-    <div class="perr" id="perr"></div>
+<div class="hdr">
+  <div class="hdri">
+    <img class="hlogo" id="logoInst" src="" alt="" onerror="this.style.display='none'">
+    <div>
+      <div class="htit">Central de Dados</div>
+      <div class="hsub">Instituto BR Arte — Monitoramento de todos os projetos</div>
+    </div>
   </div>
 </div>
 
-<div id="ld"><div class="spin"></div><div class="ltxt">Carregando dados do projeto...</div></div>
+<div class="wrap">
+  <div class="st">Projetos Ativos</div>
+  <div class="gproj" id="gridProjetos"></div>
 
-<div id="app">
-  <div class="hdr">
-    <div class="hdri">
-      <div style="display:flex;align-items:center;gap:12px">
-        <img class="hlogo" id="logoInst" src="" alt="" onerror="this.style.display='none'">
-        <div>
-          <div class="htit">Portas Abertas</div>
-          <div class="hsub">Instituto BR Arte × UFRRJ</div>
-        </div>
-      </div>
-      <div class="hnav">
-        <button class="nbtn on" data-vw="dash" onclick="irPara('dash')">Visão Geral</button>
-        <button class="nbtn" data-vw="metas" onclick="irPara('metas')">Metas e Turmas</button>
-        <button class="nbtn" data-vw="relatorios" onclick="irPara('relatorios')">Relatórios Transferegov</button>
-      </div>
-    </div>
-    <div class="breadcrumb" id="breadcrumb"><b onclick="irPara('dash')">Instituto BR Arte</b> <span class="sep">›</span> Portas Abertas</div>
-  </div>
-
-  <div class="wrap">
-    <div class="alertwrap" id="alertwrap"></div>
-
-    <div class="vw on" id="vw-dash">
-      <div class="intro">
-        <h2>O que é o Portas Abertas?</h2>
-        <p>O <b>Portas Abertas</b> é um projeto de qualificação profissional gratuita do Instituto BR Arte, em parceria com a UFRRJ, que oferece <b>63 turmas</b> em <b>9 polos</b> da região metropolitana do Rio de Janeiro, totalizando <b>1.260 vagas</b> nas áreas de estética, alimentação, artesanato e artes visuais.</p>
-        <p>Vigência: <span id="txtVigencia">—</span>. Este painel mostra o que já foi executado e o que ainda falta, turma a turma e polo a polo — não trata de valores financeiros, apenas de quantidades de execução.</p>
-        <div class="intro-score">
-          <div>
-            <div class="iscore-num" id="scoreGeral">—</div>
-            <div class="iscore-lab">Score geral do projeto</div>
-          </div>
-          <div class="sbw" style="flex:1;height:14px"><div class="sb" id="scoreGeralBar" style="width:0%"></div></div>
-        </div>
-      </div>
-
-      <div class="st">Quantitativo Geral do Projeto</div>
-      <div class="g4" id="quantCards"></div>
-
-      <div class="st">Polos de Execução</div>
-      <div class="gpolos" id="gridPolos"></div>
-    </div>
-
-    <div class="vw" id="vw-polo">
-      <button class="back" onclick="irPara('dash')">‹ Voltar</button>
-      <h2 id="poloTitulo" style="color:var(--az);margin-bottom:6px"></h2>
-      <div style="font-size:12px;color:#777;margin-bottom:18px" id="poloResumo"></div>
-      <div class="st">Turmas deste polo</div>
-      <table class="tbl" id="tblTurmasPolo"></table>
-    </div>
-
-    <div class="vw" id="vw-metas">
-      <h2 style="color:var(--az);margin-bottom:14px">Metas e Turmas</h2>
-      <div class="g2" id="metaCards" style="margin-bottom:20px"></div>
-      <div class="fbar" id="filtroTurmasPolo"></div>
-      <table class="tbl" id="tblTurmas"></table>
-    </div>
-
-    <div class="vw" id="vw-relatorios">
-      <h2 style="color:var(--az);margin-bottom:14px">Relatórios enviados ao Transferegov</h2>
-      <div class="fbar" id="filtroRelStatus"></div>
-      <table class="tbl" id="tblRelatorios"></table>
-    </div>
-
-    <div class="foot">
-      <div>Instituto BR Arte — Portas Abertas — Monitoramento de execução (sem dados financeiros)</div>
-      <div id="footUltima"></div>
-    </div>
-  </div>
+  <div class="foot">Instituto BR Arte — Central de Dados</div>
 </div>
 
 <script>
-var APPS_SCRIPT_URL = 'https://script.google.com/a/macros/institutobrarte.org/s/AKfycbxZgoFpG1tNooHTgTivotO9-QwKShLb4-1qBFMypDE3E8fBi0ti58mfukeTFWJ9xfjC/exec';
-var SENHA_PADRAO = 'Brarte@2026';
-
-var D = null;
-var MESES_PT = {'01':'Jan','02':'Fev','03':'Mar','04':'Abr','05':'Mai','06':'Jun','07':'Jul','08':'Ago','09':'Set','10':'Out','11':'Nov','12':'Dez'};
-
-var TOOLTIPS = {
-  'competência': 'Cada mês corrido do projeto. Uma "competência" é um mês de execução — ex: Competência 2025-04 = abril de 2025.',
-  'meta': 'Um bloco de entregas do Plano de Trabalho aprovado (ex: Meta 3 = oferta de 36 turmas). Cada meta tem uma quantidade prevista e uma quantidade realizada.',
-  'aditivo': 'Um termo que estende ou altera o prazo/valor de um convênio já assinado — no caso do Portas Abertas, estendeu a vigência original de 12 meses.',
-  'rubrica': 'Uma linha específica de gasto dentro do orçamento do projeto (este painel não trata de rubricas financeiras, apenas de quantidades de execução).'
-};
-function tip(termo, textoExibido) {
-  var t = TOOLTIPS[termo.toLowerCase()] || '';
-  return '<span class="tip">' + textoExibido + '<span class="tiptxt">' + t + '</span></span>';
-}
-function rotuloCompetencia(chave) {
-  var p = String(chave || '').split('-');
-  if (p.length !== 2) return chave;
-  return (MESES_PT[p[1]] || p[1]) + '/' + p[0];
-}
-
-function chkPwd() {
-  var v = document.getElementById('pf').value;
-  var senhaEsperada = (D && D.config && D.config['Senha do Portal']) ? D.config['Senha do Portal'] : SENHA_PADRAO;
-  if (v === senhaEsperada || sessionStorage.getItem('pa_ok') === '1') {
-    document.getElementById('pwd').classList.add('off');
-    sessionStorage.setItem('pa_ok', '1');
-    if (!D) carregarApp(); else { document.getElementById('app').classList.add('on'); }
-  } else {
-    document.getElementById('perr').textContent = 'Senha incorreta. Verifique com a coordenação do projeto.';
-    document.getElementById('pf').value = '';
+// ─────────────────────────────────────────────────────────────────
+// REGISTRO DE PROJETOS — para adicionar um novo projeto à Central,
+// basta adicionar um novo objeto neste array com nome, subtítulo e a
+// URL da página (GitHub Pages) daquele projeto. Nenhum outro trecho
+// do arquivo precisa ser alterado.
+//
+// Esta versão da Central é só navegação (clique para abrir o painel
+// de cada projeto) — sem tentar buscar score ao vivo via Web App, de
+// propósito, para não depender de ter a URL do Web App de cada um dos
+// 17 projetos em mãos. O score de cada projeto mora no painel dele.
+// ─────────────────────────────────────────────────────────────────
+var REGISTRO_PROJETOS = [
+  {
+    nome: 'Portas Abertas',
+    subtitulo: 'Qualificação profissional — 9 polos, 63 turmas',
+    paginaUrl: 'index_portas_abertas.html'
+  },
+  {
+    nome: 'Prospera Turismo',
+    subtitulo: 'Rotas turísticas em territórios (PTUR)',
+    paginaUrl: 'https://centraldedados-code.github.io/pturmonitoramento/'
+  },
+  {
+    nome: 'Prospera Rio',
+    subtitulo: '',
+    paginaUrl: 'https://redeprosperariodejaneiro-lgtm.github.io/prosperarioportal/'
+  },
+  {
+    nome: 'CRIA HUB',
+    subtitulo: '',
+    paginaUrl: 'https://centraldedados-code.github.io/criahubrjmonitoramento/'
   }
+];
+
+function renderCard(proj) {
+  return '<div class="pcard" onclick="abrirProjeto(\'' + proj.paginaUrl + '\')">' +
+    '<div class="pnome">' + proj.nome + '</div>' +
+    (proj.subtitulo ? '<div class="psub2">' + proj.subtitulo + '</div>' : '') +
+    '<div class="pseta">Abrir painel ›</div>' +
+    '</div>';
 }
 
-(function preCarregar() {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('COLE_AQUI') !== -1) return;
-  fetch(APPS_SCRIPT_URL + '?action=api').then(function (r) { return r.json(); }).then(function (data) { D = data; }).catch(function () {});
-})();
+function abrirProjeto(url) { window.location.href = url; }
 
-function carregarApp() {
-  document.getElementById('ld').classList.add('on');
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('COLE_AQUI') !== -1) {
-    document.getElementById('ld').classList.remove('on');
-    document.getElementById('app').classList.add('on');
-    D = { config: {}, turmas: [], quantitativoGeral: [], metas: [], relatorios: [] };
-    alert('Atenção: preencha APPS_SCRIPT_URL no início do script com a URL do Web App implantado.');
-    renderAll();
-    return;
-  }
-  fetch(APPS_SCRIPT_URL + '?action=api')
-    .then(function (resp) { if (!resp.ok) throw new Error('HTTP ' + resp.status); return resp.json(); })
-    .then(function (data) {
-      D = data;
-      document.getElementById('ld').classList.remove('on');
-      document.getElementById('app').classList.add('on');
-      if (D.config['URL Logo Instituto BR Arte (GitHub)']) {
-        document.getElementById('logoInst').src = D.config['URL Logo Instituto BR Arte (GitHub)'];
-        document.getElementById('logoPwd').src = D.config['URL Logo Instituto BR Arte (GitHub)'];
-      }
-      renderAll();
-    })
-    .catch(function (err) {
-      document.getElementById('ld').classList.remove('on');
-      document.getElementById('app').classList.add('on');
-      alert('Erro ao carregar dados: ' + err.message + '\\nVerifique se o Web App está implantado como "Qualquer pessoa".');
-    });
-}
-
-function irPara(vw, extra) {
-  document.querySelectorAll('.vw').forEach(function (v) { v.classList.remove('on'); });
-  document.getElementById('vw-' + vw).classList.add('on');
-  document.querySelectorAll('.nbtn').forEach(function (b) { b.classList.remove('on'); });
-  var btn = document.querySelector('.nbtn[data-vw="' + vw + '"]');
-  if (btn) btn.classList.add('on');
-
-  var bc = '<b onclick="irPara(\'dash\')">Instituto BR Arte</b> <span class="sep">›</span> <b onclick="irPara(\'dash\')">Portas Abertas</b>';
-  if (vw === 'polo' && extra) {
-    bc += ' <span class="sep">›</span> ' + extra;
-    renderPolo(extra);
-  } else if (vw === 'metas') {
-    bc += ' <span class="sep">›</span> Metas e Turmas';
-    renderMetaCards();
-    renderTurmas(null);
-  } else if (vw === 'relatorios') {
-    bc += ' <span class="sep">›</span> Relatórios Transferegov';
-    renderRelatorios(null);
-  }
-  document.getElementById('breadcrumb').innerHTML = bc;
-  window.scrollTo(0, 0);
-}
-
-function corBarra(pct) {
-  if (pct >= 90) return 'shi';
-  if (pct >= 50) return 'smid';
-  if (pct > 0) return 'slow';
-  return 'scrit';
-}
-function badgeStatus(status) {
-  var s = (status || '').toLowerCase();
-  if (s.indexOf('realiz') !== -1) return '<span class="badge bR">Realizado</span>';
-  if (s.indexOf('crít') !== -1 || s.indexOf('crit') !== -1) return '<span class="badge bC">Crítico</span>';
-  if (s.indexOf('envi') !== -1) return '<span class="badge bR">Enviado</span>';
-  if (s.indexOf('atras') !== -1) return '<span class="badge bC">Atrasado</span>';
-  if (s.indexOf('aguardando') !== -1) return '<span class="badge bA">' + (status || 'Aguardando') + '</span>';
-  return '<span class="badge bP">Pendente</span>';
-}
-
-function scorePolo(polo) {
-  var turmas = D.turmas.filter(function (t) { return t.Polo === polo && (t.Status || '').indexOf('Aguardando') === -1; });
-  if (turmas.length === 0) return 0;
-  var totalVagas = 0, vagasRealizadas = 0;
-  turmas.forEach(function (t) {
-    var v = parseFloat(t.Vagas) || 0;
-    totalVagas += v;
-    if ((t.Status || '').indexOf('Realiz') !== -1) vagasRealizadas += v;
-  });
-  return totalVagas > 0 ? Math.round((vagasRealizadas / totalVagas) * 100) : 0;
-}
-
-function listaPolos() {
-  return Array.from(new Set(D.turmas.map(function (t) { return t.Polo; }))).filter(Boolean);
-}
-
-function scoreGeralProjeto() {
-  var polos = listaPolos();
-  if (polos.length === 0) return 0;
-  var soma = 0;
-  polos.forEach(function (p) { soma += scorePolo(p); });
-  return Math.round(soma / polos.length);
-}
-
-function renderAll() {
-  document.getElementById('txtVigencia').textContent = D.config['Vigência'] || '—';
-  document.getElementById('footUltima').textContent = 'Última atualização: ' + (D.config['Última Atualização'] || 'ainda não executado');
-
-  var sg = scoreGeralProjeto();
-  document.getElementById('scoreGeral').textContent = sg + '%';
-  document.getElementById('scoreGeral').style.color = sg >= 90 ? 'var(--gv)' : sg >= 50 ? 'var(--azs)' : sg > 0 ? '#c9940a' : '#cc2222';
-  var bar = document.getElementById('scoreGeralBar');
-  bar.style.width = sg + '%';
-  bar.className = 'sb ' + corBarra(sg);
-
-  renderAlertas();
-  renderQuantitativo();
-  renderGridPolos();
-}
-
-function renderAlertas() {
-  var criticas = D.turmas.filter(function (t) { return (t.Status || '').indexOf('Crít') !== -1; });
-  var relAtrasados = D.relatorios.filter(function (r) { return (r.Status || '').indexOf('Atras') !== -1; });
+function iniciar() {
   var html = '';
-  if (criticas.length > 0 || relAtrasados.length > 0) {
-    html += '<div class="abox"><div class="atit">⚠ Itens críticos que precisam de atenção</div>';
-    criticas.slice(0, 6).forEach(function (t) {
-      html += '<div class="aitem">Turma ' + t['ID Turma'] + ' — ' + t['Nome do Curso'] + ' (' + t.Polo + '): sem evidências obrigatórias</div>';
-    });
-    relAtrasados.slice(0, 4).forEach(function (r) {
-      html += '<div class="aitem">Relatório atrasado — ' + r['Território'] + ' (' + rotuloCompetencia(r.Competência) + ')</div>';
-    });
-    html += '</div>';
-  }
-  document.getElementById('alertwrap').innerHTML = html;
+  REGISTRO_PROJETOS.forEach(function (p) { html += renderCard(p); });
+  document.getElementById('gridProjetos').innerHTML = html;
 }
-
-function renderQuantitativo() {
-  var html = '';
-  D.quantitativoGeral.forEach(function (q) {
-    var statusClasse = q.Status === 'Confirmado' ? 'qConfirmado' : (q.Status === 'Estimado' ? 'qEstimado' : 'qAconfirmar');
-    html += '<div class="qcard">' +
-      '<div class="qicon">' + (q['Ícone Sugerido'] || '') + '</div>' +
-      '<div class="qnum">' + q.Quantidade + '</div>' +
-      '<div class="qlab">' + q.Item + '</div>' +
-      '<div class="qobs">' + (q['Observação / Premissa'] || '') + '</div>' +
-      '<div class="qbadge ' + statusClasse + '">' + q.Status + '</div>' +
-      '</div>';
-  });
-  document.getElementById('quantCards').innerHTML = html;
-}
-
-function renderGridPolos() {
-  var polos = listaPolos();
-  var html = '';
-  polos.forEach(function (polo) {
-    var sc = scorePolo(polo);
-    html += '<div class="tcard" onclick="irPara(\'polo\',\'' + polo + '\')">' +
-      '<div class="tnome">' + polo + '</div>' +
-      '<div class="tsc" style="color:' + (sc >= 90 ? 'var(--gv)' : sc >= 50 ? 'var(--azs)' : sc > 0 ? '#c9940a' : '#cc2222') + '">' + sc + '%</div>' +
-      '<div class="sbw" style="margin-top:8px"><div class="sb ' + corBarra(sc) + '" style="width:' + sc + '%"></div></div>' +
-      '<div class="tmeta">' + D.turmas.filter(function (t) { return t.Polo === polo; }).length + ' turmas</div></div>';
-  });
-  document.getElementById('gridPolos').innerHTML = html;
-}
-
-function tabelaTurmasHTML(lista) {
-  var html = '<tr><th>ID Turma</th><th>Curso</th><th>Polo</th><th>Meta</th><th>Vagas</th><th>Status</th></tr>';
-  lista.forEach(function (t) {
-    html += '<tr><td>' + t['ID Turma'] + '</td><td>' + t['Nome do Curso'] + '</td><td>' + t.Polo +
-      '</td><td>' + t['Meta Vinculada'] + '</td><td>' + t.Vagas + '</td><td>' + badgeStatus(t.Status) + '</td></tr>';
-  });
-  return html;
-}
-
-function renderPolo(polo) {
-  document.getElementById('poloTitulo').textContent = polo;
-  var sc = scorePolo(polo);
-  document.getElementById('poloResumo').innerHTML = 'Score do polo: <b>' + sc + '%</b>';
-  var turmas = D.turmas.filter(function (t) { return t.Polo === polo; });
-  document.getElementById('tblTurmasPolo').innerHTML = tabelaTurmasHTML(turmas);
-}
-
-function renderMetaCards() {
-  var html = '';
-  D.metas.forEach(function (m) {
-    var pct = parseFloat(m['Percentual de Execução']) || 0;
-    html += '<div class="metacard">' +
-      '<div class="metatit">' + tip('meta', 'Meta ' + m.Meta) + '</div>' +
-      '<div class="metadesc">' + m['Descrição'] + '</div>' +
-      '<div class="metanum">' + m['Turmas Realizadas'] + ' / ' + m['Turmas Previstas'] + ' turmas</div>' +
-      '<div class="sbw" style="margin-top:8px"><div class="sb ' + corBarra(pct) + '" style="width:' + pct + '%"></div></div>' +
-      '<div style="margin-top:8px">' + badgeStatus(m.Status) + '</div>' +
-      '</div>';
-  });
-  document.getElementById('metaCards').innerHTML = html;
-}
-
-function renderTurmas(filtroPolo) {
-  var lista = D.turmas;
-  if (filtroPolo) lista = lista.filter(function (t) { return t.Polo === filtroPolo; });
-  document.getElementById('tblTurmas').innerHTML = tabelaTurmasHTML(lista);
-
-  var polos = listaPolos();
-  var fh = '<button class="fbtn on" onclick="filtrarTurmas(this,null)">Todos os polos</button>';
-  polos.forEach(function (p) { fh += '<button class="fbtn" onclick="filtrarTurmas(this,\'' + p + '\')">' + p + '</button>'; });
-  document.getElementById('filtroTurmasPolo').innerHTML = fh;
-}
-function filtrarTurmas(btn, polo) {
-  document.querySelectorAll('#filtroTurmasPolo .fbtn').forEach(function (b) { b.classList.remove('on'); });
-  btn.classList.add('on');
-  renderTurmas(polo);
-}
-
-function tabelaRelatoriosHTML(lista) {
-  var html = '<tr><th>Território / Consolidado</th><th>Mês</th><th>Data Prevista</th><th>Data Efetiva</th><th>Link</th><th>Status</th></tr>';
-  lista.forEach(function (r) {
-    html += '<tr><td>' + r['Território'] + '</td><td>' + rotuloCompetencia(r['Competência']) + '</td><td>' + (r['Data Prevista de Envio'] || '—') +
-      '</td><td>' + (r['Data Efetiva de Envio'] || '—') + '</td><td>' +
-      (r['Link do Relatório'] ? '<a href="' + r['Link do Relatório'] + '" target="_blank">Abrir</a>' : '—') +
-      '</td><td>' + badgeStatus(r.Status) + '</td></tr>';
-  });
-  return html;
-}
-function renderRelatorios(filtroStatus) {
-  var lista = D.relatorios;
-  if (filtroStatus) lista = lista.filter(function (r) { return r.Status === filtroStatus; });
-  document.getElementById('tblRelatorios').innerHTML = tabelaRelatoriosHTML(lista);
-  var fh = '';
-  ['Enviado', 'Pendente', 'Atrasado'].forEach(function (s) {
-    fh += '<button class="fbtn' + (filtroStatus === s ? ' on' : '') + '" onclick="filtrarRelatorios(this,\'' + s + '\')">' + s + '</button>';
-  });
-  fh = '<button class="fbtn' + (!filtroStatus ? ' on' : '') + '" onclick="filtrarRelatorios(this,null)">Todos</button>' + fh;
-  document.getElementById('filtroRelStatus').innerHTML = fh;
-}
-function filtrarRelatorios(btn, status) {
-  document.querySelectorAll('#filtroRelStatus .fbtn').forEach(function (b) { b.classList.remove('on'); });
-  btn.classList.add('on');
-  renderRelatorios(status);
-}
-
-if (sessionStorage.getItem('pa_ok') === '1') {
-  document.getElementById('pwd').classList.add('off');
-  carregarApp();
-}
+iniciar();
 </script>
 </body>
 </html>
